@@ -51,7 +51,7 @@ def content_based_filtering(food_name):
 # Streamlit UI
 st.title("🍔 Food Recommender System")
 
-# User input
+# User input for food name
 food_name = st.text_input("Enter the name of a food:")
 
 # Check for empty input
@@ -70,6 +70,10 @@ if food_name:
         # Display an image if available
         if 'image_url' in food_details and food_details['image_url']:
             st.image(food_details['image_url'], caption=food_details['food_name'], width=300)
+
+        # Category filter
+        category_filter = st.selectbox("Filter recommendations by category:", food_data['category'].unique())
+        filtered_food_data = food_data[food_data['category'] == category_filter]
 
         # Recommendations based on the selected method
         filtering_method = st.selectbox("Select Recommendation Method:", ["Collaborative Filtering", "Content-Based Filtering"])
