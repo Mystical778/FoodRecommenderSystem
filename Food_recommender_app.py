@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import CountVectorizer
 import difflib as df
 
 # Load food dataset
@@ -24,6 +22,18 @@ food_data['combined_features'] = (
     food_data['description'].astype(str)
 )
 
+# Function to compute cosine similarity using NumPy
+def cosine_similarity_numpy(v1, v2):
+    # Compute the dot product
+    dot_product = np.dot(v1, v2)
+    
+    # Compute the Euclidean norm (magnitude) of each vector
+    norm_v1 = np.linalg.norm(v1)
+    norm_v2 = np.linalg.norm(v2)
+    
+    # Return cosine similarity (dot product / product of norms)
+    return dot_product / (norm_v1 * norm_v2)
+
 # Function to find the closest match
 def find_closest_match(user_input):
     food_names = food_data['food_name'].tolist()
@@ -32,20 +42,39 @@ def find_closest_match(user_input):
 
 # Collaborative Filtering
 def collaborative_filtering(food_name):
-    similarity_matrix = cosine_similarity(numeric_data)
+    similarity_scores = []
+
+    # Get the vector of the input food (based on description length)
     food_index = food_data[food_data['food_name'] == food_name].index[0]
-    similar_foods = list(enumerate(similarity_matrix[food_index]))
-    sorted_similar_foods = sorted(similar_foods, key=lambda x: x[1], reverse=True)
+    food_vector = numeric_data.iloc[food_index].values
+    
+    # Compute similarity with all other foods
+    for index, row in numeric_data.iterrows():
+        other_food_vector = row.values
+        score = cosine_similarity_numpy(food_vector, other_food_vector)
+        similarity_scores.append((index, score))
+    
+    # Sort by similarity score
+    sorted_similar_foods = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
     return sorted_similar_foods[1:11]  # Exclude itself
 
 # Content-Based Filtering
 def content_based_filtering(food_name):
     cv = CountVectorizer()
     features_matrix = cv.fit_transform(food_data['combined_features'])
-    similarity_scores = cosine_similarity(features_matrix, features_matrix)
+
+    similarity_scores = []
     food_index = food_data[food_data['food_name'] == food_name].index[0]
-    similar_foods = list(enumerate(similarity_scores[food_index]))
-    sorted_similar_foods = sorted(similar_foods, key=lambda x: x[1], reverse=True)
+    food_vector = features_matrix[food_index].toarray().flatten()
+
+    # Compute similarity with all other foods
+    for index in range(features_matrix.shape[0]):
+        other_food_vector = features_matrix[index].toarray().flatten()
+        score = cosine_similarity_numpy(food_vector, other_food_vector)
+        similarity_scores.append((index, score))
+
+    # Sort by similarity score
+    sorted_similar_foods = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
     return sorted_similar_foods[1:11]  # Exclude itself
 
 # Streamlit UI
@@ -66,10 +95,10 @@ if food_name:
         st.subheader(f"Details for '{closest_match}':")
         st.write(f"**Category:** {food_details['category']}")
         st.write(f"**Description:** {food_details['description'][:200]}...")  # Display a portion of the description
-        
+
         # Recommendations based on the selected method
         filtering_method = st.selectbox("Select Recommendation Method:", ["Collaborative Filtering", "Content-Based Filtering"])
-        
+
         if filtering_method == "Collaborative Filtering":
             recommendations = collaborative_filtering(closest_match)
             st.subheader(f"Top 10 foods similar to '{closest_match}' (Collaborative Filtering):")
