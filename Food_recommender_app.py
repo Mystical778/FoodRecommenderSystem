@@ -11,71 +11,68 @@ import difflib as df
 st.set_page_config(page_title="Food Recommender Dashboard", layout="wide")
 
 # ================================
-# ✅ CUSTOM DARK THEME CSS
+# ✅ ORANGE THEME CSS
 # ================================
 st.markdown("""
     <style>
-        /* Background & Text */
         .stApp {
-            background-color: #1e1e1e;
-            color: #ffffff;
+            background-color: #fff8f0;
+            font-family: 'Poppins', sans-serif;
         }
         /* Titles */
         .main-title {
             text-align: center;
             font-size: 42px;
-            color: #FFA726;
+            color: #FF7043; /* Warm Orange */
             font-weight: bold;
             margin-bottom: 5px;
         }
         .sub-title {
             text-align: center;
             font-size: 18px;
-            color: #cccccc;
+            color: #888;
             margin-bottom: 30px;
         }
-        /* Input fields */
+        /* Text Input */
         .stTextInput>div>div>input {
-            border: 2px solid #FFA726;
+            border: 2px solid #FF7043;
             border-radius: 10px;
             padding: 10px;
             font-size: 18px;
-            background-color: #2a2a2a;
-            color: white;
+            background-color: #fff;
         }
         /* Dropdown */
         .stSelectbox div[data-baseweb="select"] {
-            background-color: #2a2a2a;
-            color: white;
+            background-color: #fff;
+            color: #333;
             border-radius: 10px;
         }
         /* Buttons */
         .stButton>button {
-            background-color: #FFA726;
-            color: black;
+            background-color: #FF7043;
+            color: white;
             font-size: 18px;
             border-radius: 8px;
             padding: 10px 20px;
             border: none;
         }
         .stButton>button:hover {
-            background-color: #FF9800;
+            background-color: #F4511E;
         }
-        /* Recommendation Card */
+        /* Cards */
         .card {
-            background-color: #2a2a2a;
+            background-color: #ffffff;
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
         .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 12px rgba(255,167,38,0.5);
+            transform: scale(1.03);
         }
         .card h4 {
-            color: #FFA726;
+            color: #FF7043;
             margin-bottom: 5px;
         }
         .card p {
@@ -89,7 +86,7 @@ st.markdown("""
 # ✅ HEADER
 # ================================
 st.markdown('<div class="main-title">🍔 Food Recommender System</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Find your favorite food and discover similar dishes</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Discover delicious recommendations based on your favorite food</div>', unsafe_allow_html=True)
 
 # ================================
 # ✅ LOAD DATA
