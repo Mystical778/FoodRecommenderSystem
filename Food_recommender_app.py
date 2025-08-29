@@ -49,13 +49,17 @@ def content_based_filtering(food_name):
     return sorted_similar_foods[1:11]
 
 # Inject custom CSS for styling
+# Inject custom CSS for dark theme with orange accents
 st.markdown("""
     <style>
+    /* Global Background & Text */
     body {
         background-color: #121212;
         color: #f5f5f5;
         font-family: 'Segoe UI', Tahoma, sans-serif;
     }
+
+    /* Main Title */
     .title {
         text-align: center;
         color: #ff6600;
@@ -63,40 +67,89 @@ st.markdown("""
         font-weight: bold;
         margin-bottom: 10px;
     }
+
+    /* Subtitle */
     .subtitle {
         text-align: center;
         color: #bbbbbb;
         font-size: 18px;
         margin-bottom: 30px;
     }
+
+    /* Text Input */
     .stTextInput > div > input {
-        background-color: #1f1f1f;
-        color: #ffffff;
-        border: 2px solid #ff6600;
-        border-radius: 8px;
-        padding: 10px;
+        background-color: #1f1f1f !important;
+        color: #ffffff !important;
+        border: 2px solid #ff6600 !important;
+        border-radius: 8px !important;
+        padding: 10px !important;
     }
-    .stSelectbox > div > div {
-        background-color: #1f1f1f;
-        color: #ffffff;
-        border: 2px solid #ff6600;
-        border-radius: 8px;
-        padding: 10px;
+
+    /* Select Box Fix (Dropdown + Text) */
+    div[data-baseweb="select"] {
+        background-color: #1f1f1f !important;
+        color: #ffffff !important;
+        border: 2px solid #ff6600 !important;
+        border-radius: 8px !important;
     }
+    div[data-baseweb="select"] * {
+        color: #ffffff !important;
+        background-color: #1f1f1f !important;
+    }
+
+    /* Buttons */
+    .stButton>button {
+        background-color: #ff6600 !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+    }
+    .stButton>button:hover {
+        background-color: #e65c00 !important;
+    }
+
+    /* Food Card */
     .food-card {
-        background-color: #1f1f1f;
-        color: #ffffff;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-left: 6px solid #ff6600;
+        background-color: #1f1f1f !important;
+        color: #ffffff !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+        border-left: 6px solid #ff6600 !important;
     }
     .food-card h4 {
-        color: #ff6600;
-        margin-bottom: 5px;
+        color: #ff6600 !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #ff6600;
+        border-radius: 4px;
+    }
+
+    /* Recommendation List */
+    .recommendation-item {
+        padding: 8px;
+        margin-bottom: 6px;
+        background: #1f1f1f;
+        border-radius: 6px;
+        border-left: 4px solid #ff6600;
+        transition: background 0.3s ease;
+    }
+    .recommendation-item:hover {
+        background: #292929;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # Title
 st.markdown('<div class="title">🍔 Food Recommender System</div>', unsafe_allow_html=True)
@@ -153,3 +206,4 @@ if food_name:
         st.warning(f"No close match found for: '{food_name}'")
 else:
     st.info("Please enter a food name to get recommendations.")
+
